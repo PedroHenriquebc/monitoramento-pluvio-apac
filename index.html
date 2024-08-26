@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boletim Pluviométrico</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        const mesorregiaoData = {
+            agreste: {
+                microrregioes: ["Todas", "Vale do Ipanema", "Vale do Ipojuca", "Alto Capibaribe", "Médio Capibaribe", "Garanhuns", "Brejo Pernambucano"],
+                bacias: ["Todas", "UNA", "IPOJUCA", "MUNDAÚ", "CAPIBARIBE", "IPANEMA", "SIRINHAÉM", "GI1", "GOIANA", "GI2", "GI4", "MOXOTÓ"],
+                municipios: ["Todos", "Saloá", "Camocim de São Félix", "Casinhas", "Surubim", "Barra de Guabiraba", "Tacaimbó", "Agrestina", "Águas Belas", "Alagoinha", "Altinho",
+                    "Angelim", "Correntes", "Cumaru", "Cupira", "Bezerros", "Vertentes", "Vertente do Lério", "Feira Nova", "Bom Conselho", "Venturosa", "Frei Miguelinho", "Garanhuns",
+                    "Bom Jardim", "Gravatá", "Iati", "Bonito", "Ibirajuba", "Brejão", "Brejo da Madre de Deus", "Tupanatinga", "Itaíba", "Buíque", "Jataúba", "João Alfredo", "Jucati", "Jupi",
+                    "Jurema", "Lagoa do Ouro", "Lagoa dos Gatos", "Toritama", "Lajedo", "Limoeiro", "Machados", "Cachoeirinha", "Orobó", "Caetés", "Palmeirina", "Panelas", "Paranatama", "Calçado",
+                    "Passira", "Pedra", "Pesqueira", "Terezinha", "Taquaritinga do Norte", "Poção", "Riacho das Almas", "Sairé", "Salgadinho", "Sanharó", "Santa Cruz do Capibaribe", "Canhotinho",
+                    "Santa Maria do Cambucá", "Capoeiras", "São Bento do Una", "São Caitano", "São João", "São Joaquim do Monte", "Belo Jardim", "São Vicente Férrer", "Caruaru"]
+            },
+            mata: {
+                microrregioes: ["Todas", "Mata Setentrional Pernambucana", "Vitória de Santo Antão", "Mata Meridional Pernambucana"],
+                bacias: ["Todas", "SIRINHAÉM", "GOIANA", "GL4", "CAPIBARIBE", "UNA", "IPOJUCA", "GI4", "GI1", "MOXOTÓ"],
+                municipios: ["Todos", "Macaparana", "Ribeirão", "Lagoa de Itaenga", "Escada", "Barreiros", "Lagoa do Carro", "Ferreiros", "Rio Formoso", "Pombos", "Primavera", "Gameleira", "Quipapá",
+                    "Glória do Goitá", "Goiana", "Paudalho", "Camutanga", "Tamandaré", "Maraial", "São Benedito do Sul", "Vitória de Santo Antão", "Belém de Maria", "Xexéu", "São José da Coroa Grande",
+                    "Buenos Aires", "Vicência", "Carpina", "Nazaré da Mata", "Sirinhaém", "Catende", "Itambé", "Chã de Alegria", "Itaquitinga", "Água Preta", "Jaqueira", "Aliança", "Amaraji", "Tracunhaém",
+                    "Chã Grande", "Condado", "Timbaúba", "Cortês", "Joaquim Nabuco", "Palmares"]
+            },
+            metropolitana: {
+                microrregioes: ["Todas", "Itamaracá", "Recife", "Suape", "Fernando de Noronha"],
+                bacias: ["Todas", "GI1", "GL1", "CAPIBARIBE", "GL2", "FERNANDO DE NORONHA", "GI2", "IPOJUCA"],
+                municipios: ["Todos", "Paulista", "Cabo de Santo Agostinho", "Araçoiaba", "Recife", "Igarassu", "Ilha de Itamaracá", "Fernando de Noronha", "Jaboatão dos Guararapes", "Camaragibe",
+                    "Ipojuca", "Olinda", "Itapissuma", "Abreu e Lima", "São Lourenço da Mata", "Moreno"]
+            },
+            sertao: {
+                microrregioes: ["Todas", "Araripina", "Salgueiro", "Pajeú", "Sertão do Moxotó"],
+                bacias: ["Todas", "PAJEÚ", "BRÍGIDA", "MOXOTÓ", "TERRA NOVA", "GI1"],
+                municipios: ["Todos", "Calumbi", "Arcoverde", "Betânia", "Bodocó", "Brejinho", "Araripina", "Carnaíba", "Cedro", "Custódia", "Exu", "Flores", "Granito", "Ibimirim", "Iguaracy",
+                    "Inajá", "Ingazeira", "Ipubi", "Itapetim", "Manari", "Mirandiba", "Moreilândia", "Ouricuri", "Parnamirim", "Quixaba", "Salgueiro", "Santa Cruz", "Santa Cruz da Baixa Verde",
+                    "Santa Filomena", "Santa Terezinha", "São José do Belmonte", "São José do Egito", "Serra Talhada", "Serrita", "Sertânia", "Solidão", "Tabira", "Afogados da Ingazeira", "Trindade",
+                    "Triunfo", "Tuparetama", "Verdejante"]
+            },
+            saofrancisco: {
+                microrregioes: ["Todas", "Petrolina", "Itaparica"],
+                bacias: ["Todas", "PONTAL", "GI4", "TERRA NOVA", "PAJEÚ", "GI8", "MOXOTÓ", "BRÍGIDA", "GI3", "GI6", "GARÇAS"],
+                municipios: ["Todos", "Terra Nova", "Orocó", "Lagoa Grande", "Jatobá", "Afrânio", "Carnaubeira da Penha", "Itacuruba", "Cabrobó", "Floresta", "Belém do São Francisco", "Dormentes",
+                    "Tacaratu", "Santa Maria da Boa Vista", "Petrolina", "Petrolândia"]
+            },
+            todas: {
+                microrregioes: ["Todas"],
+                bacias: ["Todas", "FERNANDO DE NORONHA", "GI2", "GL3", "RIO TIMBÓ", "RIO BEBERIBE", "RIO PARATIBE", "GL4", "GI6", "GI9", "GI8", "GL5",
+                    "GI5", "GL6", "GI1", "GI3", "GI4", "GI7", "IPOJUCA", "BRÍGIDA", "CAPIBARIBE", "GARÇAS", "GL1", "UNA", "PAJEÚ", "PONTAL", "SIRINHAÉM",
+                    "TERRA NOVA", "GL2", "MOXOTÓ", "SIRINHAÉM", "IPANEMA", "GOIANA", "MUNDAÚ"],
+                municipios: ["Todos", "Macaparana", "Ribeirão", "Lagoa de Itaenga", "Escada", "Barreiros", "Lagoa do Carro", "Ferreiros", "Rio Formoso", "Pombos", "Primavera", "Gameleira", "Quipapá",
+                    "Glória do Goitá", "Goiana", "Paudalho", "Camutanga", "Tamandaré", "Maraial", "São Benedito do Sul", "Vitória de Santo Antão", "Belém de Maria", "Xexéu", "São José da Coroa Grande",
+                    "Buenos Aires", "Vicência", "Carpina", "Nazaré da Mata", "Sirinhaém", "Catende", "Itambé", "Chã de Alegria", "Itaquitinga", "Água Preta", "Jaqueira", "Aliança", "Amaraji", "Tracunhaém",
+                    "Chã Grande", "Condado", "Timbaúba", "Cortês", "Joaquim Nabuco", "Palmares", "Paulista", "Cabo de Santo Agostinho", "Araçoiaba", "Recife", "Igarassu", "Ilha de Itamaracá", "Fernando de Noronha", "Jaboatão dos Guararapes", "Camaragibe",
+                    "Ipojuca", "Olinda", "Itapissuma", "Abreu e Lima", "São Lourenço da Mata", "Moreno", "Calumbi", "Arcoverde", "Betânia", "Bodocó", "Brejinho", "Araripina", "Carnaíba", "Cedro", "Custódia", "Exu", "Flores", "Granito", "Ibimirim", "Iguaracy",
+                    "Inajá", "Ingazeira", "Ipubi", "Itapetim", "Manari", "Mirandiba", "Moreilândia", "Ouricuri", "Parnamirim", "Quixaba", "Salgueiro", "Santa Cruz", "Santa Cruz da Baixa Verde",
+                    "Santa Filomena", "Santa Terezinha", "São José do Belmonte", "São José do Egito", "Serra Talhada", "Serrita", "Sertânia", "Solidão", "Tabira", "Afogados da Ingazeira", "Trindade",
+                    "Triunfo", "Tuparetama", "Verdejante", "Terra Nova", "Orocó", "Lagoa Grande", "Jatobá", "Afrânio", "Carnaubeira da Penha", "Itacuruba", "Cabrobó", "Floresta", "Belém do São Francisco", "Dormentes",
+                    "Tacaratu", "Santa Maria da Boa Vista", "Petrolina", "Petrolândia"]
+
+            }
+        }
+
+        function updateSelections() {
+            let mesorregiao = document.getElementById('mesorregiao').value;
+            switch (mesorregiao) {
+                case "Agreste Pernambucano":
+                    mesorregiao = "agreste";
+                    break;
+                case "Mata Pernambucana":
+                    mesorregiao = "mata";
+                    break;
+                case "Metropolitana de Recife":
+                    mesorregiao = "metropolitana";
+                    break;
+                case "Sertão Pernambucano":
+                    mesorregiao = "sertao";
+                    break;
+                case "São Francisco Pernambucano":
+                    mesorregiao = "saofrancisco";
+                    break;
+                case "Todas":
+                    mesorregiao = "todas";
+                    break;
+            }
+
+            const microrregiaoSelect = document.getElementById('microrregiao');
+            const baciaSelect = document.getElementById('bacia');
+            const municipioSelect = document.getElementById('municipio');
+
+            microrregiaoSelect.innerHTML = '';
+            baciaSelect.innerHTML = '';
+            municipioSelect.innerHTML = '';
+
+            mesorregiaoData[mesorregiao].microrregioes.forEach(microrregiao => {
+                const option = document.createElement('option');
+                option.textContent = microrregiao;
+                microrregiaoSelect.appendChild(option);
+            });
+
+            mesorregiaoData[mesorregiao].bacias.forEach(bacia => {
+                const option = document.createElement('option');
+                option.textContent = bacia;
+                baciaSelect.appendChild(option);
+            });
+
+            mesorregiaoData[mesorregiao].municipios.forEach(municipio => {
+                const option = document.createElement('option');
+                option.textContent = municipio;
+                municipioSelect.appendChild(option);
+            });
+        }
+
+        function toggleDataFinal() {
+            const dataFinalLabel = document.getElementById('dataFinalLabel');
+            const dataFinal = document.getElementById('dataFinal');
+            const radioMensal = document.getElementById('mensal');
+            const radioDiario = document.getElementById('diario');
+            const message = document.getElementById('message');
+
+            if (radioMensal.checked) {
+                dataFinalLabel.style.display = 'block';
+                dataFinal.style.display = 'block';
+                dataFinal.required = true;
+                // message.textContent = "Obs: Selecione o intervalo de dados coletados. Intervalo menor que 1 mês será a soma do período selecionado, porém a climatologia e estatísticos serão do mês solicitado. Caso o período seja mais de 1 mês, serão realizados a soma de todo o período.";
+                message.style.display = 'block';
+            } else if (radioDiario.checked) {
+                dataFinalLabel.style.display = 'none';
+                dataFinal.style.display = 'none';
+                dataFinal.required = false;
+                dataFinal.value = '';
+                // message.textContent = "Obs: Será realizado a soma dos valores das 9h do dia anterior até as 9h do dia selecionado. Esses dados contém estações pluviométricas manuais e automáticas.";
+                message.style.display = 'block';
+            } else {
+                message.style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const radios = document.getElementsByName('tipoBoletimPeriodo');
+            radios.forEach(radio => {
+                radio.addEventListener('change', toggleDataFinal);
+            });
+
+            toggleDataFinal(); // Ensure the correct display state on page load
+        });
+
+        window.onload = function () {
+            updateSelections();
+        };
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <img src="logo3_apac_2024.png" alt="Logo">
+        <h1>Monitoramento Pluviométrico</h1>
+        <form action="monitoramento.php" method="post">
+            <label for="mesorregiao">Mesorregião</label>
+            <select id="mesorregiao" name="mesorregiao" onchange="updateSelections()">
+                <option value="Todas">Todas</option>
+                <option value="Agreste Pernambucano">Agreste Pernambucano</option>
+                <option value="Mata Pernambucana">Mata Pernambucana</option>
+                <option value="Metropolitana de Recife">Metropolitana de Recife</option>
+                <option value="Sertão Pernambucano">Sertão Pernambucano</option>
+                <option value="São Francisco Pernambucano">São Francisco Pernambucano</option>
+            </select>
+
+            <label for="microrregiao">Microrregião</label>
+            <select id="microrregiao" name="microrregiao"></select>
+
+            <label for="municipio">Município</label>
+            <select id="municipio" name="municipio"></select>
+
+            <label for="bacia">Bacia</label>
+            <select id="bacia" name="bacia"></select>
+
+            <input type="radio" id="mensal" name="tipoBoletimPeriodo" value="Mensal" checked="checked">
+            <label for="mensal">Mensal</label>
+            <input type="radio" id="diario" name="tipoBoletimPeriodo" value="Diário">
+            <label for="diario">Diário</label>
+            <br>
+
+            <label for="dataInicial">Data Inicial</label>
+            <input type="date" id="dataInicial" name="dataInicial" required>
+
+            <label for="dataFinal" id="dataFinalLabel" style="display:none;">Data Final</label>
+            <input type="date" id="dataFinal" name="dataFinal" style="display:none;">
+
+            <p id="message" style="display:none; color: rgb(236, 55, 55);"></p>
+
+            <button type="submit">Gerar</button>
+        </form>
+    </div>
+</body>
+
+</html>

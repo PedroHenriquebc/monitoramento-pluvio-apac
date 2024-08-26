@@ -1,0 +1,70 @@
+img {
+    height: 300px;
+    margin-left: 130px;
+}
+
+body {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif, sans-serif, Arial;
+    background-color: #e1f5fe;
+    /* Cor de fundo azul claro */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #0077c2;
+    /* Cor do texto azul */
+}
+
+label {
+    /* display: block; */
+    /* margin-bottom: 20px; */
+    font-weight: bold;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px 0px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #ffca28;
+    /* Cor do botão amarelo */
+    border: none;
+    border-radius: 4px;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #ffa000;
+}
+
+input[type="checkbox"] {
+    width: 20px;
+}
+
+input[type="radio"] {
+    width: 20px;
+}
