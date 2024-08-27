@@ -5,47 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monitoramento de Chuvas</title>
     <style>
-        body {
+         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f7f6;
             color: #333;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            overflow-x: auto; /* Permite o scroll horizontal no corpo da página */
         }
 
         table {
-            width: auto; /* A tabela pode exceder a largura da página */
+            width: 50%; 
             border-collapse: collapse;
+            text-align: center;
+            margin: 50px;
             background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
-            overflow-x: auto; /* Scroll horizontal na tabela */
         }
 
         th, td {
-            padding: 12px 15px;
-            text-align: left;
-            white-space: nowrap; /* Evita quebra de linha, mantendo as células em uma única linha */
+            border: 1px solid #000000; 
+            padding: 8px;
+            text-align: center;
+            margin: auto;
         }
         
-        img {
-            max-width: 500px; /* Ajuste a largura da imagem conforme necessário */
-            margin-bottom: 20px;
-        }
-
         th {
             background-color: #679dd6;
             color: #fff;
+            text-align: center;
+            margin: auto;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             font-size: 14px;
         }
 
+        img {
+            max-width: 500px; /* Ajuste a largura da imagem conforme necessário */
+            display: block;
+            margin: 20px auto;
+        }
+        
         td {
             border-bottom: 1px solid #ddd;
             font-size: 14px;
@@ -81,8 +78,10 @@
 </head>
 <body>
 
-    <img src="logo3_apac_2024.png" alt="Logo ou Imagem">
-    <div style="overflow-x: auto;">
+    <div style="text-align: center;">
+        <img src="logo3_apac_2024.png" alt="Logo ou Imagem">
+    </div>
+    <div>
     <?php
     // Configuração das datas
     $dataInicialExplode = explode("-", $_POST["dataInicial"]);
@@ -121,14 +120,13 @@
         return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch;
     });
 
-    // Processar os dados usando hora_leitura
+   // Processar os dados usando hora_leitura
     $grouped_data = [];
 
     foreach ($filtered_data as $entry) {
         $hora_leitura = new DateTime($entry['hora_leitura']);
         $ano_mes = $hora_leitura->format('Y-m');
         $estacao = $entry['nome_estacao'];
-        $dia = $hora_leitura->format('d');
         $codigo_gmmc = $entry['codigo_gmmc'];
 
         if (!isset($grouped_data[$ano_mes])) {
@@ -140,28 +138,23 @@
         }
 
         // Armazena o valor da chuva no dia específico
-        $grouped_data[$ano_mes][$codigo_gmmc][$dia] = $entry['total_chuva'];
+        $grouped_data[$ano_mes][$codigo_gmmc][$hora_leitura->format('d')] = $entry['total_chuva'];
     }
-
-    // Ordenar os dados por ano
-    ksort($grouped_data);
 
     // Organizar os dias ou meses como colunas e exibir o resultado
     echo "<table border='1'>";
-    echo "<tr><th>Nome da Estação</th><th>Mesorregião</th><th>Microrregião</th><th>Município</th><th>Bacia</th><th>";
+    echo "<tr><th>Estação</th><th>Mesorregião</th><th>Microrregião</th><th>Município</th><th>Bacia</th><th>";
 
     if ($exibirMensal) {
-        echo "Ano";
-        echo "</th><th>Janeiro</th><th>Fevereiro</th><th>Março</th><th>Abril</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th><th>Setembro</th><th>Outubro</th><th>Novembro</th><th>Dezembro</th>";
+        echo "Ano</th><th>Janeiro</th><th>Fevereiro</th><th>Março</th><th>Abril</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th><th>Setembro</th><th>Outubro</th><th>Novembro</th><th>Dezembro";
     } else {
-        echo "Dia";
+        echo "Ano/Mês</th>";
         for ($day = 1; $day <= 31; $day++) {
             echo "<th>" . str_pad($day, 2, '0', STR_PAD_LEFT) . "</th>";
         }
     }
 
-    echo "<th>Acumulado</th>";
-    echo "</tr>";
+    echo "<th>Acumulado</th></tr>";
 
     $unique_entries = [];
 
@@ -189,7 +182,7 @@
             $ano = (new DateTime($ano_mes . '-01'))->format('Y');
             echo $ano;
         } else {
-            echo $hora_leitura->format('d/m/Y'); // Adiciona o formato correto para o dia
+            echo $hora_leitura->format('Y/m'); // Exibe apenas o ano e o mês
         }
         echo "</td>";
 
@@ -222,6 +215,7 @@
                 }
             }
         } else {
+            // Para o tipo Diário, a coluna "Ano/Mês" exibe apenas o ano e o mês.
             for ($day = 1; $day <= 31; $day++) {
                 $day_str = str_pad($day, 2, '0', STR_PAD_LEFT);
                 $value = isset($grouped_data[$ano_mes][$codigo_gmmc][$day_str]) ? $grouped_data[$ano_mes][$codigo_gmmc][$day_str] : '-';
