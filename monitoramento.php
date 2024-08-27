@@ -143,13 +143,18 @@
         $grouped_data[$ano_mes][$codigo_gmmc][$dia] = $entry['total_chuva'];
     }
 
+    // Ordenar os dados por ano
+    ksort($grouped_data);
+
     // Organizar os dias ou meses como colunas e exibir o resultado
     echo "<table border='1'>";
-    echo "<tr><th>Mesorregião</th><th>Microrregião</th><th>Município</th><th>Bacia</th><th>Ano/Mês</th><th>Estação</th>";
+    echo "<tr><th>Nome da Estação</th><th>Mesorregião</th><th>Microrregião</th><th>Município</th><th>Bacia</th><th>";
 
     if ($exibirMensal) {
-        echo "<th>Janeiro</th><th>Fevereiro</th><th>Março</th><th>Abril</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th><th>Setembro</th><th>Outubro</th><th>Novembro</th><th>Dezembro</th>";
+        echo "Ano";
+        echo "</th><th>Janeiro</th><th>Fevereiro</th><th>Março</th><th>Abril</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th><th>Setembro</th><th>Outubro</th><th>Novembro</th><th>Dezembro</th>";
     } else {
+        echo "Dia";
         for ($day = 1; $day <= 31; $day++) {
             echo "<th>" . str_pad($day, 2, '0', STR_PAD_LEFT) . "</th>";
         }
@@ -174,12 +179,19 @@
 
         $valor_chuva_acumulado = 0;
         echo "<tr>";
+        echo "<td>" . $estacao . "</td>";
         echo "<td>" . $entry['mesoregiao'] . "</td>";
         echo "<td>" . $entry['microregiao'] . "</td>";
         echo "<td>" . $entry['municipio'] . "</td>";
         echo "<td>" . $entry['bacia'] . "</td>";
-        echo "<td>$ano_mes</td>";
-        echo "<td>$estacao</td>";
+        echo "<td>";
+        if ($exibirMensal) {
+            $ano = (new DateTime($ano_mes . '-01'))->format('Y');
+            echo $ano;
+        } else {
+            echo $hora_leitura->format('d/m/Y'); // Adiciona o formato correto para o dia
+        }
+        echo "</td>";
 
         if ($exibirMensal) {
             $chuva_mensal = array_fill(1, 12, 0);
@@ -200,11 +212,9 @@
 
             $primeiro_mes = (int) $dataInicial->format('m');
             $ultimo_mes = (int) $dataFinal->format('m');
-            $ano_inicial = $dataInicial->format('Y');
-            $ano_final = $dataFinal->format('Y');
 
             for ($mes = 1; $mes <= 12; $mes++) {
-                if ($mes < $primeiro_mes || $mes > $ultimo_mes || ($ano_inicial !== $ano_final && $ano_inicial != $ano_final)) {
+                if ($mes < $primeiro_mes || $mes > $ultimo_mes) {
                     echo "<td>-</td>";
                 } else {
                     echo "<td>" . number_format($chuva_mensal[$mes], 2, ',', '') . "</td>";
@@ -214,9 +224,11 @@
         } else {
             for ($day = 1; $day <= 31; $day++) {
                 $day_str = str_pad($day, 2, '0', STR_PAD_LEFT);
-                $value = isset($grouped_data[$ano_mes][$codigo_gmmc][$day_str]) ? $grouped_data[$ano_mes][$codigo_gmmc][$day_str] : '';
-                echo "<td>" . ($value !== '' ? number_format($value, 2, ',', '') : '-') . "</td>";
-                $valor_chuva_acumulado += ($value !== '' ? $value : 0);
+                $value = isset($grouped_data[$ano_mes][$codigo_gmmc][$day_str]) ? $grouped_data[$ano_mes][$codigo_gmmc][$day_str] : '-';
+                echo "<td>" . ($value === '-' ? '-' : number_format($value, 2, ',', '')) . "</td>";
+                if ($value !== '-') {
+                    $valor_chuva_acumulado += $value;
+                }
             }
         }
 
