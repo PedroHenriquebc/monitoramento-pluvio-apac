@@ -127,16 +127,17 @@
                 dataFinal.required = true;
                 // message.textContent = "Obs: Selecione o intervalo de dados coletados. Intervalo menor que 1 mês será a soma do período selecionado, porém a climatologia e estatísticos serão do mês solicitado. Caso o período seja mais de 1 mês, serão realizados a soma de todo o período.";
                 message.style.display = 'block';
-            } else if (radioDiario.checked) {
-                dataFinalLabel.style.display = 'none';
-                dataFinal.style.display = 'none';
-                dataFinal.required = false;
-                dataFinal.value = '';
-                // message.textContent = "Obs: Será realizado a soma dos valores das 9h do dia anterior até as 9h do dia selecionado. Esses dados contém estações pluviométricas manuais e automáticas.";
-                message.style.display = 'block';
-            } else {
-                message.style.display = 'none';
             }
+            // else if (radioDiario.checked) {
+            //     dataFinalLabel.style.display = 'none';
+            //     dataFinal.style.display = 'none';
+            //     dataFinal.required = false;
+            //     dataFinal.value = '';
+            //     // message.textContent = "Obs: Será realizado a soma dos valores das 9h do dia anterior até as 9h do dia selecionado. Esses dados contém estações pluviométricas manuais e automáticas.";
+            //     message.style.display = 'block';
+            // } else {
+            //     message.style.display = 'none';
+            // }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
