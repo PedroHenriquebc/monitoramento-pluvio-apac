@@ -159,7 +159,7 @@
     <div class="container">
         <img src="logo3_apac_2024.png" alt="Logo">
         <h1>Monitoramento Pluviométrico</h1>
-        <form action="monitoramento.php" method="post">
+        <form method="POST" action="" id="boletimForm">
             <label for="mesorregiao">Mesorregião</label>
             <select id="mesorregiao" name="mesorregiao" onchange="updateSelections()">
                 <option value="Todas">Todas</option>
@@ -179,9 +179,20 @@
             <label for="bacia">Bacia</label>
             <select id="bacia" name="bacia"></select>
 
-            <input type="radio" id="mensal" name="tipoBoletimPeriodo" value="Mensal" checked="checked">
+            <!-- <select name="tipoBoletimPeriodo">
+                <option value="Diário">Diário</option>
+                <option value="Mensal">Mensal</option>
+            </select> -->
+            <!-- <label>Tipo de Boletim:</label>
+            <input type="radio" id="diario" name="tipoBoletim" value="Diário" required>
+            <label for="diario">Diário</label>
+            <input type="radio" id="mensal" name="tipoBoletim" value="Mensal">
+            <label for="mensal">Mensal</label> -->
+
+
+            <input type="radio" id="mensal" name="tipoBoletim" value="Mensal" checked="checked">
             <label for="mensal">Mensal</label>
-            <input type="radio" id="diario" name="tipoBoletimPeriodo" value="Diário">
+            <input type="radio" id="diario" name="tipoBoletim" value="Diário">
             <label for="diario">Diário</label>
             <br>
 
@@ -194,8 +205,16 @@
             <p id="message" style="display:none; color: rgb(236, 55, 55);"></p>
 
             <button type="submit">Gerar</button>
+
         </form>
     </div>
+
+    <script>
+        document.getElementById('boletimForm').onsubmit = function () {
+            const tipoBoletim = document.querySelector('input[name="tipoBoletim"]:checked').value;
+            this.action = tipoBoletim === 'Diário' ? 'diario.php' : 'mensal.php';
+        };
+    </script>
 </body>
 
 </html>
