@@ -1,3 +1,4 @@
+<php? require 'libs/PhpSpreadsheet/vendor/autoload.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -82,31 +83,20 @@
     <img src="logo3_apac_2024.png" alt="Logo ou Imagem">
 </div>
 
+<div style="text-align: center;">
+    <form method="post" action="export_mensal.php">
+        <input type="hidden" name="dataInicial" value="<?php echo $_POST['dataInicial']; ?>">
+        <input type="hidden" name="dataFinal" value="<?php echo $_POST['dataFinal']; ?>">
+        <input type="hidden" name="mesorregiao" value="<?php echo $_POST['mesorregiao']; ?>">
+        <input type="hidden" name="microrregiao" value="<?php echo $_POST['microrregiao']; ?>">
+        <input type="hidden" name="municipio" value="<?php echo $_POST['municipio']; ?>">
+        <input type="hidden" name="bacia" value="<?php echo $_POST['bacia']; ?>">
+        <button type="submit">Exportar para Excel</button>
+    </form>
+</div>
+
+
 <table id="tabelaMensal">
-        <!-- <thead>
-            <tr>
-                <th onclick="sortTable(0)">Estação</th>
-                <th onclick="sortTable(1)">Mesorregião</th>
-                <th onclick="sortTable(2)">Microrregião</th>
-                <th onclick="sortTable(3)">Município</th>
-                <th onclick="sortTable(4)">Bacia</th>
-                <th>Ano</th>
-                <th>Janeiro</th>
-                <th>Fevereiro</th>
-                <th>Março</th>
-                <th>Abril</th>
-                <th>Maio</th>
-                <th>Junho</th>
-                <th>Julho</th>
-                <th>Agosto</th>
-                <th>Setembro</th>
-                <th>Outubro</th>
-                <th>Novembro</th>
-                <th>Dezembro</th>
-                <th>Acumulado</th>
-            </tr>
-        </thead>
-        <tbody> -->
 <?php
 // Configuração das datas
 $dataInicialExplode = explode("-", $_POST["dataInicial"]);
@@ -223,24 +213,5 @@ echo "</table>";
 ?>
         </tbody>
     </table>
-
-    <!-- <script>
-        function sortTable(column) {
-            var table = document.getElementById("tabelaMensal");
-            var rows = Array.from(table.rows).slice(1);
-            var ascending = table.getAttribute("data-order") === "asc";
-            rows.sort((a, b) => {
-                var cellA = a.cells[column].innerText;
-                var cellB = b.cells[column].innerText;
-                if (ascending) {
-                    return cellA.localeCompare(cellB, undefined, { numeric: true });
-                } else {
-                    return cellB.localeCompare(cellA, undefined, { numeric: true });
-                }
-            });
-            rows.forEach(row => table.appendChild(row));
-            table.setAttribute("data-order", ascending ? "desc" : "asc");
-        }
-    </script> -->
 </body>
 </html>
