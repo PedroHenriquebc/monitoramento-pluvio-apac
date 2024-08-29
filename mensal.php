@@ -144,7 +144,8 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
 // $grouped_data = [dataInicialFormatUrl, $dataFinalFormatUrl];
 
 // Requisição ao JSON
-$url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+// $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+$url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
 $json_data = file_get_contents($url);
 
 if ($json_data === false) {
@@ -231,7 +232,8 @@ if (isset($_POST['download_excel'])) {
     }
 
     // Requisição ao JSON
-    $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+    // $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+    $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
     $json_data = file_get_contents($url);
 
     if ($json_data === false) {
@@ -319,7 +321,9 @@ if (isset($_POST['download_excel'])) {
             ];
 
             for ($i = 1; $i <= 12; $i++) {
-                $row[] = number_format($info['chuva_mensal'][$i], 2, ',', '.');
+                $chuva = $info['chuva_mensal'][$i];
+                $row[] = $chuva > 0 ? number_format($chuva, 2, ',', '.') : '-';
+                
             }
             $data_excel[] = $row;
         }
@@ -329,7 +333,19 @@ if (isset($_POST['download_excel'])) {
         $filename = "monitoramento_mensal_" . date('Ymd') . ".xlsx";
         $xlsx->saveAs($filename);
 
-        var_dump($data_excel);
+        
+
+        try {
+            $xlsx = SimpleXLSXGen::fromArray($data_excel);
+            if (!$xlsx) {
+                throw new Exception('Falha ao criar o arquivo Excel.');
+            }
+            $xlsx->downloadAs('teste.xlsx');
+            exit;
+        } catch (Exception $e) {
+            echo 'Erro ao gerar o arquivo Excel: ' . $e->getMessage();
+        }
+
 
         // Envia o arquivo para download
         header('Content-Disposition: attachment; filename="' . $filename . '"');
