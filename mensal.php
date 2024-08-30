@@ -267,89 +267,91 @@ if (isset($_POST['download_excel'])) {
         return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch && $hora_leitura >= $dataInicial && $hora_leitura <= $dataFinal;
     });
 
-    // Agrupamento dos dados mensais
     foreach ($filtered_data as $entry) {
-        $hora_leitura = new DateTime($entry['hora_leitura']);
-        $ano_mes = $hora_leitura->format('Y-m');
-        $estacao = $entry['nome_estacao'];
-        $codigo_gmmc = $entry['codigo_gmmc'];
+    $hora_leitura = new DateTime($entry['hora_leitura']);
+    $ano_mes = $hora_leitura->format('Y-m');
+    $estacao = $entry['nome_estacao'];
+    $codigo_gmmc = $entry['codigo_gmmc'];
 
-        if (!isset($grouped_data[$codigo_gmmc])) {
-            $grouped_data[$codigo_gmmc] = [
-                'estacao' => $estacao,
-                'mesoregiao' => $entry['mesoregiao'],
-                'microregiao' => $entry['microregiao'],
-                'municipio' => $entry['municipio'],
-                'bacia' => $entry['bacia'],
-                'latitude' => $entry['latitude'],
-                'longitude' => $entry['longitude'],
-                'chuva_mensal' => array_fill(1, 12, 0)
-            ];
-        }
+    $latitude = "'" . (string)$entry['latitude'] . "'"; // Prefixo para texto
+    $longitude = "'" . (string)$entry['longitude'] . "'"; // Prefixo para texto
 
-        $mes_num = (int) $hora_leitura->format('m');
-        $grouped_data[$codigo_gmmc]['chuva_mensal'][$mes_num] += $entry['total_chuva'];
+    if (!isset($grouped_data[$codigo_gmmc])) {
+        $grouped_data[$codigo_gmmc] = [
+            'estacao' => $estacao,
+            'mesoregiao' => $entry['mesoregiao'],
+            'microregiao' => $entry['microregiao'],
+            'municipio' => $entry['municipio'],
+            'bacia' => $entry['bacia'],
+            'latitude' =>  $latitude,
+            'longitude' => $longitude,
+            'chuva_mensal' => array_fill(1, 12, 0), // Inicializa todos os meses com 0
+            'acumulado' => 0 // Inicializa acumulado com 0
+        ];
     }
 
-    if (empty($grouped_data)) {
-        echo "Não há dados para gerar o Excel.";
-    } else {
-        $data_excel = [];
+    $mes_num = (int) $hora_leitura->format('m');
+    $grouped_data[$codigo_gmmc]['chuva_mensal'][$mes_num] += $entry['total_chuva'];
+}
 
-        // Adiciona cabeçalhos
-        $headers = ['Estação', 'Mesorregião', 'Microrregião', 'Município', 'Bacia', 'Latitude', 'Longitude', 'Ano'];
+// Verifica se há dados para exportar
+if (empty($grouped_data)) {
+    echo "Não há dados para gerar o Excel.";
+} else {
+    $data_excel = [];
+
+    // Adiciona cabeçalhos
+    $headers = ['Estação', 'Mesorregião', 'Microrregião', 'Município', 'Bacia', 'Latitude', 'Longitude', 'Ano', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Acumulado'];
+    $data_excel[] = $headers;
+
+    // Adiciona dados
+    foreach ($grouped_data as $codigo_gmmc => $info) {
+        $valor_chuva_acumulado = array_sum($info['chuva_mensal']); // Calcula o total acumulado
+        $row = [
+            $info['estacao'],
+            $info['mesoregiao'],
+            $info['microregiao'],
+            $info['municipio'],
+            $info['bacia'],
+            $info['latitude'],
+            $info['longitude'],
+            date('Y'), // Ano atual
+        ];
+
+        // Adiciona os valores mensais
         for ($i = 1; $i <= 12; $i++) {
-            $headers[] = "Mês $i";
-        }
-        $data_excel[] = $headers;
-
-        // Adiciona dados
-        foreach ($grouped_data as $codigo_gmmc => $info) {
-            $row = [
-                $info['estacao'],
-                $info['mesoregiao'],
-                $info['microregiao'],
-                $info['municipio'],
-                $info['bacia'],
-                $info['latitude'],
-                $info['longitude'],
-                date('Y') // Ano atual
-            ];
-
-            for ($i = 1; $i <= 12; $i++) {
-                $chuva = $info['chuva_mensal'][$i];
-                $row[] = $chuva > 0 ? number_format($chuva, 2, ',', '.') : '-';
-                
-            }
-            $data_excel[] = $row;
+            $chuva = $info['chuva_mensal'][$i];
+            $row[] = $chuva > 0 ? number_format($chuva, 2, ',', '.') : '-';
         }
 
-        // Criação do arquivo Excel
-        $xlsx = SimpleXLSXGen::fromArray($data_excel);
-        $filename = "monitoramento_mensal_" . date('Ymd') . ".xlsx";
-        $xlsx->saveAs($filename);
+        // Adiciona o valor acumulado na última coluna
+        $row[] = number_format($valor_chuva_acumulado, 2, ',', '.');
 
-        
-
-        try {
-            $xlsx = SimpleXLSXGen::fromArray($data_excel);
-            if (!$xlsx) {
-                throw new Exception('Falha ao criar o arquivo Excel.');
-            }
-            $xlsx->downloadAs('teste.xlsx');
-            exit;
-        } catch (Exception $e) {
-            echo 'Erro ao gerar o arquivo Excel: ' . $e->getMessage();
-        }
-
-
-        // Envia o arquivo para download
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        readfile($filename);
-        unlink($filename); // Remove o arquivo após o download
-        exit;
+        $data_excel[] = $row;
     }
+
+    // Criação do arquivo Excel
+    $xlsx = SimpleXLSXGen::fromArray($data_excel);
+    $filename = "monitoramento_mensal_" . date('Ymd') . ".xlsx";
+
+    try {
+        $xlsx = SimpleXLSXGen::fromArray($data_excel);
+        if (!$xlsx) {
+            throw new Exception('Falha ao criar o arquivo Excel.');
+        }
+        $xlsx->downloadAs('teste.xlsx');
+        exit;
+    } catch (Exception $e) {
+        echo 'Erro ao gerar o arquivo Excel: ' . $e->getMessage();
+    }
+
+    // Envia o arquivo para download
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    readfile($filename);
+    unlink($filename); // Remove o arquivo após o download
+    exit;
+}
 }
 
 // Exibição da tabela
