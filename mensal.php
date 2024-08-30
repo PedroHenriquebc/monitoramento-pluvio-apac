@@ -1,11 +1,7 @@
 <?php
 require_once 'libs/SimpleXLSXGen.php';
-
 use Shuchkin\SimpleXLSXGen;
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -144,8 +140,8 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
 // $grouped_data = [dataInicialFormatUrl, $dataFinalFormatUrl];
 
 // Requisição ao JSON
-// $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
-$url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
+$url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+// $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
 $json_data = file_get_contents($url);
 
 if ($json_data === false) {
@@ -232,8 +228,8 @@ if (isset($_POST['download_excel'])) {
     }
 
     // Requisição ao JSON
-    // $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
-    $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
+    $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+    // $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
     $json_data = file_get_contents($url);
 
     if ($json_data === false) {

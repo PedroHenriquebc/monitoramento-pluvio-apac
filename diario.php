@@ -1,3 +1,7 @@
+<?php
+require_once 'libs/SimpleXLSXGen.php';
+use Shuchkin\SimpleXLSXGen;
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -38,7 +42,7 @@
         }
 
         img {
-            max-width: 500px; /* Ajuste a largura da imagem conforme necessário */
+            max-width: 500px; 
             display: block;
             margin: 20px auto;
         }
@@ -82,8 +86,27 @@
     <img src="logo3_apac_2024.png" alt="Logo ou Imagem">
 </div>
 
-<div>
+<!-- Botão para gerar e baixar o Excel -->
+<div style="text-align: center; margin-bottom: 20px;">
+    <form method="post">
+        <input type="hidden" name="dataInicial" value="<?php echo htmlspecialchars($_POST['dataInicial'] ?? ''); ?>">
+        <input type="hidden" name="dataFinal" value="<?php echo htmlspecialchars($_POST['dataFinal'] ?? ''); ?>">
+        <input type="hidden" name="mesorregiao" value="<?php echo htmlspecialchars($_POST['mesorregiao'] ?? 'Todas'); ?>">
+        <input type="hidden" name="microrregiao" value="<?php echo htmlspecialchars($_POST['microrregiao'] ?? 'Todas'); ?>">
+        <input type="hidden" name="municipio" value="<?php echo htmlspecialchars($_POST['municipio'] ?? 'Todos'); ?>">
+        <input type="hidden" name="bacia" value="<?php echo htmlspecialchars($_POST['bacia'] ?? 'Todas'); ?>">
+        
+        <button type="submit" name="download_excel" style="padding: 10px 20px; font-size: 16px; background-color: #679dd6; color: #fff; border: none; border-radius: 5px; cursor: pointer;">
+            Baixar Excel
+        </button>
+    </form>
+</div>
+
 <?php
+
+// Inicializa a variável $grouped_data
+$grouped_data = [];
+
 // Configuração das datas
 $dataInicialExplode = explode("-", $_POST["dataInicial"]);
 $dataInicialFormat = $dataInicialExplode[2] . "/" . $dataInicialExplode[1] . "/" . $dataInicialExplode[0];
@@ -137,57 +160,78 @@ foreach ($filtered_data as $entry) {
     $grouped_data[$ano_mes][$codigo_gmmc][$hora_leitura->format('d')] = $entry['total_chuva'];
 }
 
-// Exibição dos dados
-echo "<table border='1'>";
-echo "<tr><th>Estação</th><th>Mesorregião</th><th>Microrregião</th><th>Município</th><th>Bacia</th><th>Latitude</th><th>Longitude</th><th>Ano/Mês</th>";
+if (isset($_POST['download_excel'])) {
+    if (empty($grouped_data)) {
+        echo "Não há dados para gerar o Excel.";
+    } else {
+        $data_excel = [];
 
-for ($day = 1; $day <= 31; $day++) {
-    echo "<th>" . str_pad($day, 2, '0', STR_PAD_LEFT) . "</th>";
-}
+        // Adiciona cabeçalhos
+        $headers = ['Estação', 'Mesorregião', 'Microrregião', 'Município', 'Bacia', 'Latitude', 'Longitude', 'Ano'];
+        for ($i = 1; $i <= 31; $i++) {
+            $headers[] = "$i";
+        }
+        $data_excel[] = $headers;
 
-echo "<th>Acumulado</th></tr>";
+        // Adiciona dados ao Excel
+        foreach ($grouped_data as $ano_mes => $stations) {
+            foreach ($stations as $codigo_gmmc => $days) {
+                $row = [
+                    $stations[$codigo_gmmc]['nome_estacao'] ?? '',
+                    $stations[$codigo_gmmc]['mesoregiao'] ?? '',
+                    $stations[$codigo_gmmc]['microregiao'] ?? '',
+                    $stations[$codigo_gmmc]['municipio'] ?? '',
+                    $stations[$codigo_gmmc]['bacia'] ?? '',
+                    $stations[$codigo_gmmc]['latitude'] ?? '',
+                    $stations[$codigo_gmmc]['longitude'] ?? '',
+                    $ano_mes
+                ];
 
-$unique_entries = [];
+                // Adiciona os valores diários de precipitação
+                for ($i = 1; $i <= 31; $i++) {
+                    $day = str_pad($i, 2, '0', STR_PAD_LEFT);
+                    $row[] = $days[$day] ?? '0,00';
+                }
 
-foreach ($filtered_data as $entry) {
-    $hora_leitura = new DateTime($entry['hora_leitura']);
-    $ano_mes = $hora_leitura->format('Y-m');
-    $estacao = $entry['nome_estacao'];
-    $codigo_gmmc = $entry['codigo_gmmc'];
+                $data_excel[] = $row;
+            }
+        }
 
-    if (isset($unique_entries[$ano_mes][$codigo_gmmc])) {
-        continue; // Pula entradas duplicadas para a mesma estação no mesmo mês/ano
-    }
-
-    $unique_entries[$ano_mes][$codigo_gmmc] = true;
-
-    $valor_chuva_acumulado = 0;
-    echo "<tr>";
-    echo "<td>" . $estacao . "</td>";
-    echo "<td>" . $entry['mesoregiao'] . "</td>";
-    echo "<td>" . $entry['microregiao'] . "</td>";
-    echo "<td>" . $entry['municipio'] . "</td>";
-    echo "<td>" . $entry['bacia'] . "</td>";
-    echo "<td>" . $entry['latitude'] . "</td>"; // Adicionado
-    echo "<td>" . $entry['longitude'] . "</td>"; // Adicionado
-    echo "<td>" . $ano_mes . "</td>";
-
-    for ($day = 1; $day <= 31; $day++) {
-        $day_str = str_pad($day, 2, '0', STR_PAD_LEFT);
-        $value = isset($grouped_data[$ano_mes][$codigo_gmmc][$day_str]) ? $grouped_data[$ano_mes][$codigo_gmmc][$day_str] : '-';
-        echo "<td>" . ($value === '-' ? '-' : number_format($value, 2, ',', '')) . "</td>";
-        if ($value !== '-') {
-            $valor_chuva_acumulado += $value;
+        try {
+            // Cria o arquivo Excel e faz o download
+            $xlsx = SimpleXLSXGen::fromArray($data_excel);
+            $filename = "monitoramento_mensal_" . date('Ymd') . ".xlsx";
+            $xlsx->downloadAs($filename);
+            exit;
+        } catch (Exception $e) {
+            echo 'Erro ao gerar o arquivo Excel: ' . $e->getMessage();
         }
     }
-
-    echo "<td>" . number_format($valor_chuva_acumulado, 2, ',', '') . "</td>";
-    echo "</tr>";
 }
 
-echo "</table>";
+// Exibe a tabela na página
+if (!empty($grouped_data)) {
+    echo "<table>";
+    echo "<tr><th>Data</th><th>Estação</th><th>Mesorregião</th><th>Microrregião</th><th>Município</th><th>Bacia</th><th>Total de Chuva</th></tr>";
+    foreach ($grouped_data as $ano_mes => $stations) {
+        foreach ($stations as $codigo_gmmc => $days) {
+            foreach ($days as $day => $total_chuva) {
+                echo "<tr>";
+                echo "<td>$ano_mes-$day</td>";
+                echo "<td>{$stations[$codigo_gmmc]['nome_estacao']}</td>";
+                echo "<td>{$stations[$codigo_gmmc]['mesoregiao']}</td>";
+                echo "<td>{$stations[$codigo_gmmc]['microregiao']}</td>";
+                echo "<td>{$stations[$codigo_gmmc]['municipio']}</td>";
+                echo "<td>{$stations[$codigo_gmmc]['bacia']}</td>";
+                echo "<td>{$total_chuva}</td>";
+                echo "</tr>";
+            }
+        }
+    }
+    echo "</table>";
+} else {
+    echo "<p>Nenhum dado encontrado para o período e filtros selecionados.</p>";
+}
 ?>
-
-</div>
 </body>
 </html>
