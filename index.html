@@ -4,8 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Monitoramento Pluviométrico</title>
+    <title>Histórico Pluviométrico</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="icons8-rain-48.png">
+    <style>
+        body {
+            font-family: "Quicksand";
+        }
+    </style>
     <script>
         const mesorregiaoData = {
             agreste: {
@@ -158,7 +167,7 @@
 <body>
     <div class="container">
         <img src="logo3_apac_2024.png" alt="Logo">
-        <h1>Monitoramento Pluviométrico</h1>
+        <h1>Histórico Pluviométrico</h1>
         <form method="POST" action="" id="boletimForm">
             <label for="mesorregiao">Mesorregião</label>
             <select id="mesorregiao" name="mesorregiao" onchange="updateSelections()">
@@ -204,7 +213,20 @@
 
             <p id="message" style="display:none; color: rgb(236, 55, 55);"></p>
 
-            <button type="submit">Gerar</button>
+            <!-- <button type="submit">Gerar</button> -->
+
+            <div class="button-container">
+                <button type="submit" class="cssbuttons-io-button">
+                    Gerar
+                    <div class="icon">
+                        <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+                                fill="currentColor"></path>
+                        </svg>
+                    </div>
+                </button>
+            </div>
 
         </form>
     </div>
