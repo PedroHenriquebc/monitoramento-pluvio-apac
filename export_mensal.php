@@ -26,6 +26,11 @@ $header = array_merge(['Estação', 'Mesorregião', 'Microrregião', 'Município
 $export_data[] = $header;
 
 if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
+    $dataInicialExplode = explode("-", $_POST["dataInicial"]);
+    $dataInicialFormat = $dataInicialExplode[2] . "/" . $dataInicialExplode[1] . "/" . $dataInicialExplode[0];
+    $dataFinalExplode = explode("-", $_POST["dataFinal"]);
+    $dataFinalFormat = $dataFinalExplode[2] . "/" . $dataFinalExplode[1] . "/" . $dataFinalExplode[0];
+
     $dataInicialFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataInicial"])));
     $dataFinalFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataFinal"])));
     $dataInicial = DateTime::createFromFormat('Y-m-d', $dataInicialFormatUrl);
@@ -122,5 +127,5 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
 }
 
 $xlsx = SimpleXLSXGen::fromArray($export_data);
-$xlsx->downloadAs('historico_mensal'. '_' .$dataInicialFormatUrl. '&'. $dataFinalFormatUrl .'xlsx');
+$xlsx->downloadAs('historico_mensal'. '_' .$dataInicialFormat. '&'. $dataFinalFormat .'xlsx');
 ?>

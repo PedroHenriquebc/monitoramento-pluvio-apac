@@ -17,6 +17,11 @@ $month_names = [
 $grouped_data = [];
 
 if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
+    $dataInicialExplode = explode("-", $_POST["dataInicial"]);
+    $dataInicialFormat = $dataInicialExplode[2] . "/" . $dataInicialExplode[1] . "/" . $dataInicialExplode[0];
+    $dataFinalExplode = explode("-", $_POST["dataFinal"]);
+    $dataFinalFormat = $dataFinalExplode[2] . "/" . $dataFinalExplode[1] . "/" . $dataFinalExplode[0];
+    
     $dataInicialFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataInicial"])));
     $dataFinalFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataFinal"])));
     $dataInicial = DateTime::createFromFormat('Y-m-d', $dataInicialFormatUrl);
@@ -149,6 +154,10 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
             color: #679dd6;
         }
 
+        p {
+            color: #929292;
+        }
+
         @media (max-width: 768px) {
             body {
                 padding: 10px;
@@ -227,6 +236,7 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
 
 <div style="text-align: center;">
     <img src="logo3_apac_2024.png" alt="Logo ou Imagem">
+    <p><?php echo 'Histórico Mensal  -  ' . $dataInicialFormat . ' à ' . $dataFinalFormat; ?></p>
 </div>
 
 <!-- Botão para gerar e baixar o Excel -->
