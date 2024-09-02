@@ -1,88 +1,99 @@
 <?php
-$month_names = [
-    1 => 'Janeiro',
-    2 => 'Fevereiro',
-    3 => 'Março',
-    4 => 'Abril',
-    5 => 'Maio',
-    6 => 'Junho',
-    7 => 'Julho',
-    8 => 'Agosto',
-    9 => 'Setembro',
-    10 => 'Outubro',
-    11 => 'Novembro',
-    12 => 'Dezembro'
-];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
+    $month_names = [
+        1 => 'Janeiro',
+        2 => 'Fevereiro',
+        3 => 'Março',
+        4 => 'Abril',
+        5 => 'Maio',
+        6 => 'Junho',
+        7 => 'Julho',
+        8 => 'Agosto',
+        9 => 'Setembro',
+        10 => 'Outubro',
+        11 => 'Novembro',
+        12 => 'Dezembro'
+    ];
 
-$grouped_data = [];
+    $grouped_data = [];
 
-if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
-    $dataInicialExplode = explode("-", $_POST["dataInicial"]);
-    $dataInicialFormat = $dataInicialExplode[2] . "/" . $dataInicialExplode[1] . "/" . $dataInicialExplode[0];
-    $dataFinalExplode = explode("-", $_POST["dataFinal"]);
-    $dataFinalFormat = $dataFinalExplode[2] . "/" . $dataFinalExplode[1] . "/" . $dataFinalExplode[0];
-    
-    $dataInicialFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataInicial"])));
-    $dataFinalFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataFinal"])));
-    $dataInicial = DateTime::createFromFormat('Y-m-d', $dataInicialFormatUrl);
-    $dataFinal = DateTime::createFromFormat('Y-m-d', $dataFinalFormatUrl);
+    if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
+        $dataInicialExplode = explode("-", $_POST["dataInicial"]);
+        $dataInicialFormat = $dataInicialExplode[2] . "/" . $dataInicialExplode[1] . "/" . $dataInicialExplode[0];
+        $dataFinalExplode = explode("-", $_POST["dataFinal"]);
+        $dataFinalFormat = $dataFinalExplode[2] . "/" . $dataFinalExplode[1] . "/" . $dataFinalExplode[0];
+        
+        $dataInicialFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataInicial"])));
+        $dataFinalFormatUrl = date('Y-m-d', strtotime(str_replace('/', '-', $_POST["dataFinal"])));
+        $dataInicial = DateTime::createFromFormat('Y-m-d', $dataInicialFormatUrl);
+        $dataFinal = DateTime::createFromFormat('Y-m-d', $dataFinalFormatUrl);
 
-    $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
-    $json_data = file_get_contents($url);
+        // Garantir que o horário seja comparável, adicionando hora inicial e final corretamente
+        $dataInicial->setTime(0, 0, 0);
+        $dataFinal->setTime(23, 59, 59);
 
-    if ($json_data === false) {
-        echo "Erro ao acessar os dados.";
-        exit;
-    }
+        // $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+        $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
+        $json_data = file_get_contents($url);
 
-    $data = json_decode($json_data, true);
-
-    if ($data === null) {
-        echo "Erro ao decodificar os dados.";
-        exit;
-    }
-
-    $selectedMesorregiao = $_POST["mesorregiao"] ?? "Todas";
-    $selectedMicrorregiao = $_POST["microrregiao"] ?? "Todas";
-    $selectedMunicipio = $_POST["municipio"] ?? "Todos";
-    $selectedBacia = $_POST["bacia"] ?? "Todas";
-
-    if (!is_array($data)) {
-        echo "Dados inválidos.";
-        exit;
-    }
-
-    $filtered_data = array_filter($data, function ($entry) use ($selectedMesorregiao, $selectedMicrorregiao, $selectedMunicipio, $selectedBacia, $dataInicial, $dataFinal) {
-        $mesoregiaoMatch = ($selectedMesorregiao == "Todas" || $entry['mesoregiao'] == $selectedMesorregiao);
-        $microregiaoMatch = ($selectedMicrorregiao == "Todas" || $entry['microregiao'] == $selectedMicrorregiao);
-        $municipioMatch = ($selectedMunicipio == "Todos" || $entry['municipio'] == $selectedMunicipio);
-        $baciaMatch = ($selectedBacia == "Todas" || $entry['bacia'] == $selectedBacia);
-        $hora_leitura = new DateTime($entry['hora_leitura']);
-
-        return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch && $hora_leitura >= $dataInicial && $hora_leitura <= $dataFinal;
-    });
-
-    foreach ($filtered_data as $entry) {
-        $hora_leitura = new DateTime($entry['hora_leitura']);
-        $mes_num = (int) $hora_leitura->format('m');
-        $estacao = $entry['nome_estacao'];
-        $codigo_gmmc = $entry['codigo_gmmc'];
-
-        if (!isset($grouped_data[$codigo_gmmc])) {
-            $grouped_data[$codigo_gmmc] = [
-                'estacao' => $estacao,
-                'mesoregiao' => $entry['mesoregiao'],
-                'microregiao' => $entry['microregiao'],
-                'municipio' => $entry['municipio'],
-                'bacia' => $entry['bacia'],
-                'latitude' => $entry['latitude'],
-                'longitude' => $entry['longitude'],
-                'chuva_mensal' => array_fill(1, 12, 0)
-            ];
+        if ($json_data === false) {
+            echo "Erro ao acessar os dados.";
+            exit;
         }
 
-        $grouped_data[$codigo_gmmc]['chuva_mensal'][$mes_num] += $entry['total_chuva'];
+        $data = json_decode($json_data, true);
+
+        if ($data === null) {
+            echo "Erro ao decodificar os dados.";
+            exit;
+        }
+
+        $selectedMesorregiao = $_POST["mesorregiao"] ?? "Todas";
+        $selectedMicrorregiao = $_POST["microrregiao"] ?? "Todas";
+        $selectedMunicipio = $_POST["municipio"] ?? "Todos";
+        $selectedBacia = $_POST["bacia"] ?? "Todas";
+
+        if (!is_array($data)) {
+            echo "Dados inválidos.";
+            exit;
+        }
+
+        $filtered_data = array_filter($data, function ($entry) use ($selectedMesorregiao, $selectedMicrorregiao, $selectedMunicipio, $selectedBacia, $dataInicial, $dataFinal) {
+            $mesoregiaoMatch = ($selectedMesorregiao == "Todas" || $entry['mesoregiao'] == $selectedMesorregiao);
+            $microregiaoMatch = ($selectedMicrorregiao == "Todas" || $entry['microregiao'] == $selectedMicrorregiao);
+            $municipioMatch = ($selectedMunicipio == "Todos" || $entry['municipio'] == $selectedMunicipio);
+            $baciaMatch = ($selectedBacia == "Todas" || $entry['bacia'] == $selectedBacia);
+            $hora_leitura = new DateTime($entry['hora_leitura']);
+
+            // Comparação de hora_leitura dentro do intervalo incluindo o mesmo dia
+            return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch && $hora_leitura >= $dataInicial && $hora_leitura <= $dataFinal;
+        });
+
+        foreach ($filtered_data as $entry) {
+            $hora_leitura = new DateTime($entry['hora_leitura']);
+            $mes_num = (int) $hora_leitura->format('m');
+            $estacao = $entry['nome_estacao'];
+            $codigo_gmmc = $entry['codigo_gmmc'];
+
+            if (!isset($grouped_data[$codigo_gmmc])) {
+                $grouped_data[$codigo_gmmc] = [
+                    'estacao' => $estacao,
+                    'mesoregiao' => $entry['mesoregiao'],
+                    'microregiao' => $entry['microregiao'],
+                    'municipio' => $entry['municipio'],
+                    'bacia' => $entry['bacia'],
+                    'latitude' => $entry['latitude'],
+                    'longitude' => $entry['longitude'],
+                    'chuva_mensal' => array_fill(1, 12, 0)
+                ];
+            }
+
+            $grouped_data[$codigo_gmmc]['chuva_mensal'][$mes_num] += $entry['total_chuva'];
+        }
     }
+} else {
+    header("Location: http://dados.apac.pe.gov.br:41120/boletins/monitoramento-pluvio/");
+    exit();
 }
 ?>
 

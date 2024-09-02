@@ -36,9 +36,12 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
     $dataInicial = DateTime::createFromFormat('Y-m-d', $dataInicialFormatUrl);
     $dataFinal = DateTime::createFromFormat('Y-m-d', $dataFinalFormatUrl);
 
+    $dataInicial->setTime(0, 0, 0);
+    $dataFinal->setTime(23, 59, 59);
+
     // Substitua a URL pelo endpoint correto
-    $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
-    // $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
+    // $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial=' . $dataInicialFormatUrl . '%2000:00:00&DataFinal=' . $dataFinalFormatUrl . '%2023:59:59';
+    $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
     $json_data = file_get_contents($url);
 
     if ($json_data === false) {
@@ -58,6 +61,16 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
     $selectedMunicipio = $_POST["municipio"] ?? "Todos";
     $selectedBacia = $_POST["bacia"] ?? "Todas";
 
+    // $filtered_data = array_filter($data, function ($entry) use ($selectedMesorregiao, $selectedMicrorregiao, $selectedMunicipio, $selectedBacia, $dataInicial, $dataFinal) {
+    //     $mesoregiaoMatch = ($selectedMesorregiao == "Todas" || $entry['mesoregiao'] == $selectedMesorregiao);
+    //     $microregiaoMatch = ($selectedMicrorregiao == "Todas" || $entry['microregiao'] == $selectedMicrorregiao);
+    //     $municipioMatch = ($selectedMunicipio == "Todos" || $entry['municipio'] == $selectedMunicipio);
+    //     $baciaMatch = ($selectedBacia == "Todas" || $entry['bacia'] == $selectedBacia);
+    //     $hora_leitura = new DateTime($entry['hora_leitura']);
+
+    //     return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch && $hora_leitura >= $dataInicial && $hora_leitura <= $dataFinal;
+    // });
+
     $filtered_data = array_filter($data, function ($entry) use ($selectedMesorregiao, $selectedMicrorregiao, $selectedMunicipio, $selectedBacia, $dataInicial, $dataFinal) {
         $mesoregiaoMatch = ($selectedMesorregiao == "Todas" || $entry['mesoregiao'] == $selectedMesorregiao);
         $microregiaoMatch = ($selectedMicrorregiao == "Todas" || $entry['microregiao'] == $selectedMicrorregiao);
@@ -65,6 +78,7 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
         $baciaMatch = ($selectedBacia == "Todas" || $entry['bacia'] == $selectedBacia);
         $hora_leitura = new DateTime($entry['hora_leitura']);
 
+        // Comparação de hora_leitura dentro do intervalo incluindo o mesmo dia
         return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch && $hora_leitura >= $dataInicial && $hora_leitura <= $dataFinal;
     });
 

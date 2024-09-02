@@ -144,6 +144,7 @@
 </head>
 <body>
     <?php
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
     // Configuração das datas
     $dataInicialExplode = explode("-", $_POST["dataInicial"]);
     $dataInicialFormat = $dataInicialExplode[2] . "/" . $dataInicialExplode[1] . "/" . $dataInicialExplode[0];
@@ -184,7 +185,8 @@
 
     <?php
     // Requisição ao JSON
-    $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
+    // $url = 'http://dados.apac.pe.gov.br:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
+    $url = 'http://172.17.100.30:41120/blank_json_boletim_chuva_diaria/blank_json_boletim_chuva_diaria.php?DataInicial='.$dataInicialFormatUrl.'%2000:00:00&DataFinal='.$dataFinalFormatUrl.'%2023:59:59';
     $json_data = file_get_contents($url);
     $data = json_decode($json_data, true);
 
@@ -320,6 +322,10 @@
     }
 
     echo "</table>";
+} else {
+    header("Location: http://dados.apac.pe.gov.br:41120/boletins/monitoramento-pluvio/");
+    exit();
+}
     ?>
     </div>
 </body>
