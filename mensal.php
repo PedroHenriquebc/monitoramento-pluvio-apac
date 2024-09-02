@@ -91,7 +91,7 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Histórico Mensal</title>
+    <title>Histórico Pluviométrico Mensal</title>
     <link rel="icon" type="image/x-icon" href="icons8-rain-48.png">
     <style>
         body {
@@ -236,7 +236,7 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
 
 <div style="text-align: center;">
     <img src="logo3_apac_2024.png" alt="Logo ou Imagem">
-    <p><?php echo 'Histórico Mensal  -  ' . $dataInicialFormat . ' à ' . $dataFinalFormat; ?></p>
+    <p><?php echo 'Histórico Pluviométrico Mensal  -  ' . $dataInicialFormat . ' à ' . $dataFinalFormat; ?></p>
 </div>
 
 <!-- Botão para gerar e baixar o Excel -->

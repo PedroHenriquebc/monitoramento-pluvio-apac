@@ -127,5 +127,5 @@ if (isset($_POST['dataInicial']) && isset($_POST['dataFinal'])) {
 }
 
 $xlsx = SimpleXLSXGen::fromArray($export_data);
-$xlsx->downloadAs('historico_mensal'. '_' .$dataInicialFormat. '&'. $dataFinalFormat .'xlsx');
+$xlsx->downloadAs('historico_pluvio_mensal'. '_' .$dataInicialFormat. '&'. $dataFinalFormat .'.xlsx');
 ?>

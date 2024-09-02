@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="icons8-rain-48.png">
-    <title>Histórico Diário</title>
+    <title>Histórico Pluviométrico Diário</title>
     <style>
          body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -162,7 +162,7 @@
 
     <div style="text-align: center;">
         <img src="logo3_apac_2024.png" alt="Logo ou Imagem">
-        <p><?php echo 'Histórico Diário  -  ' . $dataInicialFormat . ' à ' . $dataFinalFormat; ?></p>
+        <p><?php echo 'Histórico Pluviométrico Diário  -  ' . $dataInicialFormat . ' à ' . $dataFinalFormat; ?></p>
     </div>
     
     <div style="text-align: center;">
