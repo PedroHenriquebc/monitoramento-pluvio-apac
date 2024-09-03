@@ -323,7 +323,7 @@
 
     echo "</table>";
 } else {
-    header("Location: http://dados.apac.pe.gov.br:41120/boletins/monitoramento-pluvio/");
+    header("Location: http://dados.apac.pe.gov.br:41120/boletins/historico-pluvio/");
     exit();
 }
     ?>

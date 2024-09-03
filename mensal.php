@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
         }
     }
 } else {
-    header("Location: http://dados.apac.pe.gov.br:41120/boletins/monitoramento-pluvio/");
+    header("Location: http://dados.apac.pe.gov.br:41120/boletins/historico-pluvio/");
     exit();
 }
 ?>

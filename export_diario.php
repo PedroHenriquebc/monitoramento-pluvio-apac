@@ -145,5 +145,5 @@ foreach ($filtered_data as $entry) {
 $final_data = array_merge([$header], $rows);
 $xlsx = SimpleXLSXGen::fromArray($final_data);
 // $xlsx->downloadAs('historico_diario.xlsx');
-$xlsx->downloadAs('historico_pluvio_diario'. '_' .$dataInicialFormat. '&'. $dataFinalFormat .'xlsx');
+$xlsx->downloadAs('historico_pluvio_diario'. '_' .$dataInicialFormat. '&'. $dataFinalFormat .'.xlsx');
 ?>
