@@ -36,6 +36,13 @@ $filtered_data = array_filter($data, function($entry) use ($selectedMesorregiao,
     return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch;
 });
 
+// Ordenar os dados filtrados por mês (hora_leitura)
+usort($filtered_data, function($a, $b) {
+    $dateA = new DateTime($a['hora_leitura']);
+    $dateB = new DateTime($b['hora_leitura']);
+    return $dateA <=> $dateB;
+});
+
 $grouped_data = [];
 
 foreach ($filtered_data as $entry) {

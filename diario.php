@@ -207,7 +207,14 @@
         return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch;
     });
 
-   // Processar os dados usando hora_leitura
+    // Ordenar os dados filtrados por mês (hora_leitura)
+    usort($filtered_data, function($a, $b) {
+        $dateA = new DateTime($a['hora_leitura']);
+        $dateB = new DateTime($b['hora_leitura']);
+        return $dateA <=> $dateB;
+    });
+
+    // Processar os dados usando hora_leitura
     $grouped_data = [];
 
     foreach ($filtered_data as $entry) {
