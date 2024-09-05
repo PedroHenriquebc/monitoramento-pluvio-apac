@@ -73,6 +73,40 @@
             }
         }
 
+        function validarDatas() {
+            const dataInicial = document.getElementById("dataInicial").value;
+            const dataFinal = document.getElementById("dataFinal").value;
+            const anoInicial = new Date(dataInicial).getFullYear();
+            const anoFinal = new Date(dataFinal).getFullYear();
+
+            // Verifica se a data final é menor que a data inicial
+            if (new Date(dataFinal) < new Date(dataInicial)) {
+                alert("A data final deve ser maior ou igual à data inicial.");
+                return false;
+            }
+
+            // Verifica se o ano é menor que 2024
+            if (anoInicial < 2024 || anoFinal < 2024) {
+                alert("O ano deve ser maior ou igual a 2024.");
+                return false;
+            }
+            return true;
+        }
+
+        function redirecionarForm() {
+            console.log("Entrei no redirecionar form");
+            var formulario = document.getElementById('formulario');
+            const tipoBoletim = document.querySelector('input[name="tipoBoletim"]:checked').value;
+            // Definir a ação do formulário com base no valor do campo de rádio
+            if (tipoBoletim === 'Diário') {
+                formulario.action = 'diario.php';
+            } else {
+                formulario.action = 'mensal.php';
+            }
+
+            formulario.submit();
+        }
+
         function updateSelections() {
             let mesorregiao = document.getElementById('mesorregiao').value;
             switch (mesorregiao) {
@@ -134,19 +168,8 @@
                 dataFinalLabel.style.display = 'block';
                 dataFinal.style.display = 'block';
                 dataFinal.required = true;
-                // message.textContent = "Obs: Selecione o intervalo de dados coletados. Intervalo menor que 1 mês será a soma do período selecionado, porém a climatologia e estatísticos serão do mês solicitado. Caso o período seja mais de 1 mês, serão realizados a soma de todo o período.";
                 message.style.display = 'block';
             }
-            // else if (radioDiario.checked) {
-            //     dataFinalLabel.style.display = 'none';
-            //     dataFinal.style.display = 'none';
-            //     dataFinal.required = false;
-            //     dataFinal.value = '';
-            //     // message.textContent = "Obs: Será realizado a soma dos valores das 9h do dia anterior até as 9h do dia selecionado. Esses dados contém estações pluviométricas manuais e automáticas.";
-            //     message.style.display = 'block';
-            // } else {
-            //     message.style.display = 'none';
-            // }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -155,7 +178,7 @@
                 radio.addEventListener('change', toggleDataFinal);
             });
 
-            toggleDataFinal(); // Ensure the correct display state on page load
+            toggleDataFinal();
         });
 
         window.onload = function () {
@@ -168,7 +191,7 @@
     <div class="container">
         <img src="logo3_apac_2024.png" alt="Logo">
         <h1>Histórico Pluviométrico</h1>
-        <form method="POST" action="" id="boletimForm">
+        <form method="POST" action="" id="formulario">
             <label for="mesorregiao">Mesorregião</label>
             <select id="mesorregiao" name="mesorregiao" onchange="updateSelections()">
                 <option value="Todas">Todas</option>
@@ -188,17 +211,6 @@
             <label for="bacia">Bacia</label>
             <select id="bacia" name="bacia"></select>
 
-            <!-- <select name="tipoBoletimPeriodo">
-                <option value="Diário">Diário</option>
-                <option value="Mensal">Mensal</option>
-            </select> -->
-            <!-- <label>Tipo de Boletim:</label>
-            <input type="radio" id="diario" name="tipoBoletim" value="Diário" required>
-            <label for="diario">Diário</label>
-            <input type="radio" id="mensal" name="tipoBoletim" value="Mensal">
-            <label for="mensal">Mensal</label> -->
-
-
             <input type="radio" id="mensal" name="tipoBoletim" value="Mensal" checked="checked">
             <label for="mensal">Mensal</label>
             <input type="radio" id="diario" name="tipoBoletim" value="Diário">
@@ -216,7 +228,7 @@
             <!-- <button type="submit">Gerar</button> -->
 
             <div class="button-container">
-                <button type="submit" class="cssbuttons-io-button">
+                <button type="button" onclick=" if (validarDatas()) {redirecionarForm();}" class="cssbuttons-io-button">
                     Gerar
                     <div class="icon">
                         <svg height="24" width="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -230,13 +242,6 @@
 
         </form>
     </div>
-
-    <script>
-        document.getElementById('boletimForm').onsubmit = function () {
-            const tipoBoletim = document.querySelector('input[name="tipoBoletim"]:checked').value;
-            this.action = tipoBoletim === 'Diário' ? 'diario.php' : 'mensal.php';
-        };
-    </script>
 </body>
 
 </html>
