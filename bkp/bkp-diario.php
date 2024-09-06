@@ -207,7 +207,14 @@
         return $mesoregiaoMatch && $microregiaoMatch && $municipioMatch && $baciaMatch;
     });
 
-   // Processar os dados usando hora_leitura
+    // Ordenar os dados filtrados por mês (hora_leitura)
+    usort($filtered_data, function($a, $b) {
+        $dateA = new DateTime($a['hora_leitura']);
+        $dateB = new DateTime($b['hora_leitura']);
+        return $dateA <=> $dateB;
+    });
+
+    // Processar os dados usando hora_leitura
     $grouped_data = [];
 
     foreach ($filtered_data as $entry) {
@@ -230,7 +237,7 @@
 
     // Organizar os dias ou meses como colunas e exibir o resultado
     echo "<table border='1'>";
-    echo "<tr><th>Estação</th><th>Mesorregião</th><th>Microrregião</th><th>Município</th><th>Bacia</th><th>Latitude</th><th>Longitude</th><th>";
+    echo "<tr><th>Município</th><th>Estação</th><th>Latitude</th><th>Longitude</th><th>Mesorregião</th><th>Microrregião</th><th>Bacia</th><th>";
 
     if ($exibirMensal) {
         echo "Ano</th><th>Janeiro</th><th>Fevereiro</th><th>Março</th><th>Abril</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th><th>Setembro</th><th>Outubro</th><th>Novembro</th><th>Dezembro";
@@ -261,13 +268,14 @@
 
         $valor_chuva_acumulado = 0;
         echo "<tr>";
-        echo "<td>" . $estacao . "</td>";
-        echo "<td>" . $entry['mesoregiao'] . "</td>";
-        echo "<td>" . $entry['microregiao'] . "</td>";
         echo "<td>" . $entry['municipio'] . "</td>";
-        echo "<td>" . $entry['bacia'] . "</td>";
+        echo "<td>" . $estacao . "</td>";
         echo "<td>" . $entry['latitude'] . "</td>";
         echo "<td>" . $entry['longitude'] . "</td>";
+        echo "<td>" . $entry['mesoregiao'] . "</td>";
+        echo "<td>" . $entry['microregiao'] . "</td>";
+        echo "<td>" . $entry['bacia'] . "</td>";
+        
         echo "<td>";
         if ($exibirMensal) {
             $ano = (new DateTime($ano_mes . '-01'))->format('Y');

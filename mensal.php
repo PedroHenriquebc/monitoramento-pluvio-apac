@@ -276,16 +276,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
 <!-- Exibição da tabela -->
 <table border='1'>
     <tr>
-        <th>Estação</th>
-        <th>Mesorregião</th>
-        <th>Microrregião</th>
         <th>Município</th>
-        <th>Bacia</th>
+        <th>Estação</th>
         <th>Latitude</th>
         <th>Longitude</th>
+        <th>Mesorregião</th>
+        <th>Microrregião</th>
+        <th>Bacia</th>
         <th>Ano</th>
 
         <?php foreach ($month_names as $month): ?>
+            
             <th><?php echo $month; ?></th>
         <?php endforeach; ?>
 
@@ -298,13 +299,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
         $ano = $dataInicial->format('Y');
         ?>
         <tr>
-            <td><?php echo $data['estacao']; ?></td>
-            <td><?php echo $data['mesoregiao']; ?></td>
-            <td><?php echo $data['microregiao']; ?></td>
             <td><?php echo $data['municipio']; ?></td>
-            <td><?php echo $data['bacia']; ?></td>
+            <td><?php echo $data['estacao']; ?></td>
             <td><?php echo $data['latitude']; ?></td>
             <td><?php echo $data['longitude']; ?></td>
+            <td><?php echo $data['mesoregiao']; ?></td>
+            <td><?php echo $data['microregiao']; ?></td>
+            <td><?php echo $data['bacia']; ?></td>
             <td><?php echo $ano; ?></td>
             
             <?php foreach ($data['chuva_mensal'] as $chuva): ?>
