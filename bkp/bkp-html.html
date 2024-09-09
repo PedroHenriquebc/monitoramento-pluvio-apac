@@ -17,15 +17,6 @@
             font-family: "Quicksand";
             font-weight: 700;
         }
-
-        .select2-container--default .select2-selection--single {
-            margin-bottom: 20px;
-
-        }
-
-        .select2-container--open .select2-dropdown--below {
-            margin-top: -20px;
-        }
     </style>
 
     <!-- Importação do Select2 CSS -->
@@ -34,62 +25,57 @@
     <script>
         const mesorregiaoData = {
             agreste: {
-                microrregioes: ["Todas", "Alto Capibaribe", "Brejo Pernambucano", "Garanhuns", "Médio Capibaribe", "Vale do Iipojuca", "Vale do Ipanema"],
-                bacias: ["Todas", "CAPIBARIBE", "GI1", "GI2", "GI4", "GOIANA", "IPOJUCA", "IPANEMA", "MUNDAÚ", "MOXOTÓ", "SIRINHAÉM", "UNA"],
-                municipios: ["Todos", "Agrestina", "Águas Belas", "Alagoinha", "Altinho", "Angelim", "Barra de Guabiraba", "Belo Jardim", "Bezerros", "Bom Conselho", "Bom Jardim", "Bonito", "Brejão", "Brejo da Madre de Deus", "Buíque", "Cachoeirinha", "Caetés",
-                    "Calçado", "Camocim de São Félix", "Canhotinho", "Capoeiras", "Caruaru", "Casinhas", "Correntes", "Cumaru", "Cupira", "Feira Nova", "Frei Miguelinho", "Garanhuns", "Gravatá", "Iati",
-                    "Ibirajuba", "Itaíba", "Jataúba", "João Alfredo", "Jucati", "Jupi", "Jurema", "Lagoa do Ouro", "Lagoa dos Gatos", "Lajedo", "Limoeiro", "Machados", "Orobó", "Palmeirina", "Panelas",
-                    "Paranatama", "Passira", "Pedra", "Pesqueira", "Poção", "Riacho das Almas", "Sairé", "Salgadinho", "Saloá", "Sanharó", "Santa Cruz do Capibaribe", "Santa Maria do Cambucá",
-                    "São Bento do Una", "São Caitano", "São João", "São Joaquim do Monte", "São Vicente Férrer", "Surubim", "Tacaimbó", "Taquaritinga do Norte", "Terezinha", "Toritama", "Tupanatinga", "Venturosa", "Vertente do Lério", "Vertentes"]
+                microrregioes: ["Todas", "Vale do Ipanema", "Vale do Ipojuca", "Alto Capibaribe", "Médio Capibaribe", "Garanhuns", "Brejo Pernambucano"],
+                bacias: ["Todas", "UNA", "IPOJUCA", "MUNDAÚ", "CAPIBARIBE", "IPANEMA", "SIRINHAÉM", "GI1", "GOIANA", "GI2", "GI4", "MOXOTÓ"],
+                municipios: ["Todos", "Saloá", "Camocim de São Félix", "Casinhas", "Surubim", "Barra de Guabiraba", "Tacaimbó", "Agrestina", "Águas Belas", "Alagoinha", "Altinho",
+                    "Angelim", "Correntes", "Cumaru", "Cupira", "Bezerros", "Vertentes", "Vertente do Lério", "Feira Nova", "Bom Conselho", "Venturosa", "Frei Miguelinho", "Garanhuns",
+                    "Bom Jardim", "Gravatá", "Iati", "Bonito", "Ibirajuba", "Brejão", "Brejo da Madre de Deus", "Tupanatinga", "Itaíba", "Buíque", "Jataúba", "João Alfredo", "Jucati", "Jupi",
+                    "Jurema", "Lagoa do Ouro", "Lagoa dos Gatos", "Toritama", "Lajedo", "Limoeiro", "Machados", "Cachoeirinha", "Orobó", "Caetés", "Palmeirina", "Panelas", "Paranatama", "Calçado",
+                    "Passira", "Pedra", "Pesqueira", "Terezinha", "Taquaritinga do Norte", "Poção", "Riacho das Almas", "Sairé", "Salgadinho", "Sanharó", "Santa Cruz do Capibaribe", "Canhotinho",
+                    "Santa Maria do Cambucá", "Capoeiras", "São Bento do Una", "São Caitano", "São João", "São Joaquim do Monte", "Belo Jardim", "São Vicente Férrer", "Caruaru"]
             },
             mata: {
-                microrregioes: ["Todas", "Mata Meridional Pernambucana", "Mata Setentrional Pernambucana", "Vitória de Santo Antão"],
-                bacias: ["Todas", "CAPIBARIBE", "GI1", "GI4", "GOIANA", "GL4", "IPOJUCA", "MOXOTÓ", "SIRINHAÉM", "UNA"],
-                municipios: ["Todos", "Água Preta", "Aliança", "Amaraji", "Barreiros", "Belém de Maria", "Buenos Aires", "Camutanga", "Carpina", "Catende", "Chã de Alegria", "Chã Grande", "Condado", "Cortês", "Escada", "Ferreiros",
-                    "Gameleira", "Glória do Goitá", "Goiana", "Itambé", "Itaquitinga", "Jaqueira", "Joaquim Nabuco", "Lagoa de Itaenga", "Lagoa do Carro", "Macaparana", "Maraial", "Nazaré da Mata",
-                    "Palmares", "Paudalho", "Pombos", "Primavera", "Quipapá", "Ribeirão", "Rio Formoso", "São Benedito do Sul", "São José da Coroa Grande", "Sirinhaém", "Tamandaré", "Timbaúba", "Tracunhaém", "Vicência", "Vitória de Santo Antão", "Xexéu"
-                ]
+                microrregioes: ["Todas", "Mata Setentrional Pernambucana", "Vitória de Santo Antão", "Mata Meridional Pernambucana"],
+                bacias: ["Todas", "SIRINHAÉM", "GOIANA", "GL4", "CAPIBARIBE", "UNA", "IPOJUCA", "GI4", "GI1", "MOXOTÓ"],
+                municipios: ["Todos", "Macaparana", "Ribeirão", "Lagoa de Itaenga", "Escada", "Barreiros", "Lagoa do Carro", "Ferreiros", "Rio Formoso", "Pombos", "Primavera", "Gameleira", "Quipapá",
+                    "Glória do Goitá", "Goiana", "Paudalho", "Camutanga", "Tamandaré", "Maraial", "São Benedito do Sul", "Vitória de Santo Antão", "Belém de Maria", "Xexéu", "São José da Coroa Grande",
+                    "Buenos Aires", "Vicência", "Carpina", "Nazaré da Mata", "Sirinhaém", "Catende", "Itambé", "Chã de Alegria", "Itaquitinga", "Água Preta", "Jaqueira", "Aliança", "Amaraji", "Tracunhaém",
+                    "Chã Grande", "Condado", "Timbaúba", "Cortês", "Joaquim Nabuco", "Palmares"]
             },
             metropolitana: {
-                microrregioes: ["Todas", "Fernando de Noronha", "Itamaracá", "Recife", "Suape"],
-                bacias: ["Todas", "CAPIBARIBE", "FERNANDO DE NORONHA", "GL1", "GL2", "GI1", "GI2", "IPOJUCA"],
-                municipios: ["Todos", "Abreu e Lima", "Araçoiaba", "Cabo de Santo Agostinho", "Camaragibe", "Fernando de Noronha", "Igarassu", "Ipojuca", "Ilha de Itamaracá", "Itapissuma", "Jaboatão dos Guararapes", "Moreno",
-                    "Olinda", "Paulista", "Recife", "São Lourenço da Mata"]
+                microrregioes: ["Todas", "Itamaracá", "Recife", "Suape", "Fernando de Noronha"],
+                bacias: ["Todas", "GI1", "GL1", "CAPIBARIBE", "GL2", "FERNANDO DE NORONHA", "GI2", "IPOJUCA"],
+                municipios: ["Todos", "Paulista", "Cabo de Santo Agostinho", "Araçoiaba", "Recife", "Igarassu", "Ilha de Itamaracá", "Fernando de Noronha", "Jaboatão dos Guararapes", "Camaragibe",
+                    "Ipojuca", "Olinda", "Itapissuma", "Abreu e Lima", "São Lourenço da Mata", "Moreno"]
             },
             sertao: {
-                microrregioes: ["Todas", "Araripina", "Pajeú", "Salgueiro", "Sertão do Moxotó"],
-                bacias: ["Todas", "BRÍGIDA", "GI1", "MOXOTÓ", "PAJEÚ", "TERRA NOVA"],
-                municipios: ["Todos", "Afogados da Ingazeira", "Araripina", "Arcoverde", "Betânia", "Bodocó", "Brejinho", "Calumbi", "Carnaíba", "Cedro", "Custódia", "Exu", "Flores", "Granito",
-                    "Ibimirim", "Iguaracy", "Inajá", "Ingazeira", "Ipubi", "Itapetim", "Manari", "Mirandiba", "Moreilândia", "Ouricuri", "Parnamirim", "Quixaba", "Salgueiro", "Santa Cruz",
-                    "Santa Cruz da Baixa Verde", "Santa Filomena", "Santa Terezinha", "São José do Belmonte", "São José do Egito", "Serra Talhada", "Serrita", "Sertânia", "Solidão", "Tabira",
-                    "Trindade", "Triunfo", "Tuparetama", "Verdejante"]
+                microrregioes: ["Todas", "Araripina", "Salgueiro", "Pajeú", "Sertão do Moxotó"],
+                bacias: ["Todas", "PAJEÚ", "BRÍGIDA", "MOXOTÓ", "TERRA NOVA", "GI1"],
+                municipios: ["Todos", "Calumbi", "Arcoverde", "Betânia", "Bodocó", "Brejinho", "Araripina", "Carnaíba", "Cedro", "Custódia", "Exu", "Flores", "Granito", "Ibimirim", "Iguaracy",
+                    "Inajá", "Ingazeira", "Ipubi", "Itapetim", "Manari", "Mirandiba", "Moreilândia", "Ouricuri", "Parnamirim", "Quixaba", "Salgueiro", "Santa Cruz", "Santa Cruz da Baixa Verde",
+                    "Santa Filomena", "Santa Terezinha", "São José do Belmonte", "São José do Egito", "Serra Talhada", "Serrita", "Sertânia", "Solidão", "Tabira", "Afogados da Ingazeira", "Trindade",
+                    "Triunfo", "Tuparetama", "Verdejante"]
             },
             saofrancisco: {
-                microrregioes: ["Todas", "Itaparica", "Petrolina"],
-                bacias: ["Todas", "BRÍGIDA", "GARÇAS", "GI3", "GI4", "GI6", "GI8", "MOXOTÓ", "PAJEÚ", "PONTAL", "TERRA NOVA"],
-                municipios: ["Todos", "Afrânio", "Belém do São Francisco", "Cabrobó", "Carnaubeira da Penha", "Dormentes", "Floresta", "Itacuruba", "Jatobá", "Lagoa Grande", "Orocó", "Petrolândia",
-                    "Petrolina", "Santa Maria da Boa Vista", "Tacaratu", "Terra Nova"]
+                microrregioes: ["Todas", "Petrolina", "Itaparica"],
+                bacias: ["Todas", "PONTAL", "GI4", "TERRA NOVA", "PAJEÚ", "GI8", "MOXOTÓ", "BRÍGIDA", "GI3", "GI6", "GARÇAS"],
+                municipios: ["Todos", "Terra Nova", "Orocó", "Lagoa Grande", "Jatobá", "Afrânio", "Carnaubeira da Penha", "Itacuruba", "Cabrobó", "Floresta", "Belém do São Francisco", "Dormentes",
+                    "Tacaratu", "Santa Maria da Boa Vista", "Petrolina", "Petrolândia"]
             },
             todas: {
                 microrregioes: ["Todas"],
-                bacias: ["Todas", "BRÍGIDA", "CAPIBARIBE", "FERNANDO DE NORONHA", "GI1", "GI2", "GI3", "GI4", "GI5", "GI6", "GI7", "GI8", "GI9", "GARÇAS", "GL1", "GL2", "GL3", "GL4", "GL5", "GL6",
-                    "GOIANA", "IPOJUCA", "IPANEMA", "MUNDAÚ", "MOXOTÓ", "PAJEÚ", "PONTAL", "RIO BEBERIBE", "RIO PARATIBE", "RIO TIMBÓ", "SIRINHAÉM", "TERRA NOVA", "UNA"],
-                municipios: ["Todos", "Abreu e Lima", "Afogados da Ingazeira", "Agrestina", "Água Preta", "Águas Belas", "Alagoinha", "Aliança", "Altinho", "Amaraji",
-                    "Angelim", "Araçoiaba", "Araripina", "Arcoverde", "Barra de Guabiraba", "Barreiros", "Belém de Maria", "Belém do São Francisco", "Belo Jardim", "Betânia", "Bezerros", "Bodocó",
-                    "Bom Conselho", "Bom Jardim", "Bonito", "Brejão", "Brejinho", "Brejo da Madre de Deus", "Buenos Aires", "Buíque", "Cabo de Santo Agostinho", "Cabrobó", "Cachoeirinha", "Caetés", "Calçado",
-                    "Calumbi", "Camaragibe", "Camocim de São Félix", "Camutanga", "Canhotinho", "Capoeiras", "Carnaíba", "Carnaubeira da Penha", "Carpina", "Caruaru", "Casinhas", "Catende", "Cedro",
-                    "Chã de Alegria", "Chã Grande", "Condado", "Correntes", "Cortês", "Cumaru", "Cupira", "Custódia", "Afrânio", "Dormentes", "Escada", "Exu", "Feira Nova", "Fernando de Noronha", "Ferreiros",
-                    "Flores", "Floresta", "Frei Miguelinho", "Gameleira", "Garanhuns", "Glória do Goitá", "Goiana", "Granito", "Gravatá", "Iati", "Ibimirim", "Ibirajuba", "Igarassu", "Iguaracy", "Inajá",
-                    "Ingazeira", "Ipojuca", "Ipubi", "Itacuruba", "Itaíba", "Ilha de Itamaracá", "Itambé", "Itapetim", "Itapissuma", "Itaquitinga", "Jaboatão dos Guararapes", "Jaqueira", "Jataúba", "Jatobá",
-                    "João Alfredo", "Joaquim Nabuco", "Jucati", "Jupi", "Jurema", "Lagoa de Itaenga", "Lagoa do Carro", "Lagoa do Ouro", "Lagoa dos Gatos", "Lagoa Grande", "Lajedo", "Limoeiro", "Macaparana",
-                    "Machados", "Manari", "Maraial", "Mirandiba", "Moreilândia", "Moreno", "Nazaré da Mata", "Olinda", "Orobó", "Orocó", "Ouricuri", "Palmares", "Palmeirina", "Panelas", "Paranatama",
-                    "Parnamirim", "Passira", "Paudalho", "Paulista", "Pedra", "Pesqueira", "Petrolândia", "Petrolina", "Poção", "Pombos", "Primavera", "Quipapá", "Quixaba", "Recife", "Riacho das Almas",
-                    "Ribeirão", "Rio Formoso", "Sairé", "Salgadinho", "Salgueiro", "Saloá", "Sanharó", "Santa Cruz", "Santa Cruz da Baixa Verde", "Santa Cruz do Capibaribe", "Santa Filomena",
-                    "Santa Maria da Boa Vista", "Santa Maria do Cambucá", "Santa Terezinha", "São Benedito do Sul", "São Bento do Una", "São Caitano", "São João", "São Joaquim do Monte",
-                    "São José da Coroa Grande", "São José do Belmonte", "São José do Egito", "São Lourenço da Mata", "São Vicente Férrer", "Serra Talhada", "Serrita", "Sertânia", "Sirinhaém",
-                    "Solidão", "Surubim", "Tabira", "Tacaimbó", "Tacaratu", "Tamandaré", "Taquaritinga do Norte", "Terezinha", "Terra Nova", "Timbaúba", "Toritama", "Tracunhaém", "Trindade", "Triunfo", "Tupanatinga",
-                    "Tuparetama", "Venturosa", "Verdejante", "Vertente do Lério", "Vertentes", "Vicência", "Vitória de Santo Antão", "Xexéu"
-                ]
+                bacias: ["Todas", "FERNANDO DE NORONHA", "GI2", "GL3", "RIO TIMBÓ", "RIO BEBERIBE", "RIO PARATIBE", "GL4", "GI6", "GI9", "GI8", "GL5",
+                    "GI5", "GL6", "GI1", "GI3", "GI4", "GI7", "IPOJUCA", "BRÍGIDA", "CAPIBARIBE", "GARÇAS", "GL1", "UNA", "PAJEÚ", "PONTAL", "SIRINHAÉM",
+                    "TERRA NOVA", "GL2", "MOXOTÓ", "SIRINHAÉM", "IPANEMA", "GOIANA", "MUNDAÚ"],
+                municipios: ["Todos", "Macaparana", "Ribeirão", "Lagoa de Itaenga", "Escada", "Barreiros", "Lagoa do Carro", "Ferreiros", "Rio Formoso", "Pombos", "Primavera", "Gameleira", "Quipapá",
+                    "Glória do Goitá", "Goiana", "Paudalho", "Camutanga", "Tamandaré", "Maraial", "São Benedito do Sul", "Vitória de Santo Antão", "Belém de Maria", "Xexéu", "São José da Coroa Grande",
+                    "Buenos Aires", "Vicência", "Carpina", "Nazaré da Mata", "Sirinhaém", "Catende", "Itambé", "Chã de Alegria", "Itaquitinga", "Água Preta", "Jaqueira", "Aliança", "Amaraji", "Tracunhaém",
+                    "Chã Grande", "Condado", "Timbaúba", "Cortês", "Joaquim Nabuco", "Palmares", "Paulista", "Cabo de Santo Agostinho", "Araçoiaba", "Recife", "Igarassu", "Ilha de Itamaracá", "Fernando de Noronha", "Jaboatão dos Guararapes", "Camaragibe",
+                    "Ipojuca", "Olinda", "Itapissuma", "Abreu e Lima", "São Lourenço da Mata", "Moreno", "Calumbi", "Arcoverde", "Betânia", "Bodocó", "Brejinho", "Araripina", "Carnaíba", "Cedro", "Custódia", "Exu", "Flores", "Granito", "Ibimirim", "Iguaracy",
+                    "Inajá", "Ingazeira", "Ipubi", "Itapetim", "Manari", "Mirandiba", "Moreilândia", "Ouricuri", "Parnamirim", "Quixaba", "Salgueiro", "Santa Cruz", "Santa Cruz da Baixa Verde",
+                    "Santa Filomena", "Santa Terezinha", "São José do Belmonte", "São José do Egito", "Serra Talhada", "Serrita", "Sertânia", "Solidão", "Tabira", "Afogados da Ingazeira", "Trindade",
+                    "Triunfo", "Tuparetama", "Verdejante", "Terra Nova", "Orocó", "Lagoa Grande", "Jatobá", "Afrânio", "Carnaubeira da Penha", "Itacuruba", "Cabrobó", "Floresta", "Belém do São Francisco", "Dormentes",
+                    "Tacaratu", "Santa Maria da Boa Vista", "Petrolina", "Petrolândia"]
 
             }
         }

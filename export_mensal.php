@@ -289,8 +289,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
         <th>Estação</th>
         <th>Latitude</th>
         <th>Longitude</th>
-        <th>Mesorregião</th>
         <th>Microrregião</th>
+        <th>Mesorregião</th>
         <th>Bacia</th>
         <th>Ano</th>
 
@@ -312,8 +312,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST)) {
             <td><?php echo $data['estacao']; ?></td>
             <td><?php echo $data['latitude']; ?></td>
             <td><?php echo $data['longitude']; ?></td>
-            <td><?php echo $data['mesoregiao']; ?></td>
             <td><?php echo $data['microregiao']; ?></td>
+            <td><?php echo $data['mesoregiao']; ?></td>
             <td><?php echo $data['bacia']; ?></td>
             <td><?php echo $ano; ?></td>
             

@@ -62,7 +62,7 @@ foreach ($filtered_data as $entry) {
 }
 
 $header = [
-    "Município", "Estação", "Latitude", "Longitude", "Mesorregião", "Microrregião", "Bacia", $exibirMensal ? "Ano" : "Ano/Mês"
+    "Município", "Estação", "Latitude", "Longitude", "Microrregião", "Mesorregião", "Bacia", $exibirMensal ? "Ano" : "Ano/Mês"
 ];
 
 if ($exibirMensal) {
@@ -97,8 +97,8 @@ foreach ($filtered_data as $entry) {
         $entry['nome_estacao'],
         $latitude, // Valor tratado como texto
         $longitude, // Valor tratado como texto
-        $entry['mesoregiao'],
         $entry['microregiao'],
+        $entry['mesoregiao'],
         $entry['bacia'],
         $exibirMensal ? (new DateTime($ano_mes . '-01'))->format('Y') : $hora_leitura->format('Y/m')
     ];

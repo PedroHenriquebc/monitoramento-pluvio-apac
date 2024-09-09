@@ -237,7 +237,7 @@
 
     // Organizar os dias ou meses como colunas e exibir o resultado
     echo "<table border='1'>";
-    echo "<tr><th>Município</th><th>Estação</th><th>Latitude</th><th>Longitude</th><th>Mesorregião</th><th>Microrregião</th><th>Bacia</th><th>";
+    echo "<tr><th>Município</th><th>Estação</th><th>Latitude</th><th>Longitude</th><th>Microrregião</th><th>Mesorregião</th><th>Bacia</th><th>";
 
     if ($exibirMensal) {
         echo "Ano</th><th>Janeiro</th><th>Fevereiro</th><th>Março</th><th>Abril</th><th>Maio</th><th>Junho</th><th>Julho</th><th>Agosto</th><th>Setembro</th><th>Outubro</th><th>Novembro</th><th>Dezembro";
@@ -272,8 +272,8 @@
         echo "<td>" . $estacao . "</td>";
         echo "<td>" . $entry['latitude'] . "</td>";
         echo "<td>" . $entry['longitude'] . "</td>";
-        echo "<td>" . $entry['mesoregiao'] . "</td>";
         echo "<td>" . $entry['microregiao'] . "</td>";
+        echo "<td>" . $entry['mesoregiao'] . "</td>";
         echo "<td>" . $entry['bacia'] . "</td>";
         
         echo "<td>";
