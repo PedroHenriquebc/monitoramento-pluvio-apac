@@ -74,11 +74,11 @@
                 microrregioes: ["Todas"],
                 bacias: ["Todas", "BRÍGIDA", "CAPIBARIBE", "FERNANDO DE NORONHA", "GI1", "GI2", "GI3", "GI4", "GI5", "GI6", "GI7", "GI8", "GI9", "GARÇAS", "GL1", "GL2", "GL3", "GL4", "GL5", "GL6",
                     "GOIANA", "IPOJUCA", "IPANEMA", "MUNDAÚ", "MOXOTÓ", "PAJEÚ", "PONTAL", "RIO BEBERIBE", "RIO PARATIBE", "RIO TIMBÓ", "SIRINHAÉM", "TERRA NOVA", "UNA"],
-                municipios: ["Todos", "Abreu e Lima", "Afogados da Ingazeira", "Agrestina", "Água Preta", "Águas Belas", "Alagoinha", "Aliança", "Altinho", "Amaraji",
+                municipios: ["Todos", "Abreu e Lima", "Afogados da Ingazeira", "Afrânio", "Agrestina", "Água Preta", "Águas Belas", "Alagoinha", "Aliança", "Altinho", "Amaraji",
                     "Angelim", "Araçoiaba", "Araripina", "Arcoverde", "Barra de Guabiraba", "Barreiros", "Belém de Maria", "Belém do São Francisco", "Belo Jardim", "Betânia", "Bezerros", "Bodocó",
                     "Bom Conselho", "Bom Jardim", "Bonito", "Brejão", "Brejinho", "Brejo da Madre de Deus", "Buenos Aires", "Buíque", "Cabo de Santo Agostinho", "Cabrobó", "Cachoeirinha", "Caetés", "Calçado",
                     "Calumbi", "Camaragibe", "Camocim de São Félix", "Camutanga", "Canhotinho", "Capoeiras", "Carnaíba", "Carnaubeira da Penha", "Carpina", "Caruaru", "Casinhas", "Catende", "Cedro",
-                    "Chã de Alegria", "Chã Grande", "Condado", "Correntes", "Cortês", "Cumaru", "Cupira", "Custódia", "Afrânio", "Dormentes", "Escada", "Exu", "Feira Nova", "Fernando de Noronha", "Ferreiros",
+                    "Chã de Alegria", "Chã Grande", "Condado", "Correntes", "Cortês", "Cumaru", "Cupira", "Custódia", "Dormentes", "Escada", "Exu", "Feira Nova", "Fernando de Noronha", "Ferreiros",
                     "Flores", "Floresta", "Frei Miguelinho", "Gameleira", "Garanhuns", "Glória do Goitá", "Goiana", "Granito", "Gravatá", "Iati", "Ibimirim", "Ibirajuba", "Igarassu", "Iguaracy", "Inajá",
                     "Ingazeira", "Ipojuca", "Ipubi", "Itacuruba", "Itaíba", "Ilha de Itamaracá", "Itambé", "Itapetim", "Itapissuma", "Itaquitinga", "Jaboatão dos Guararapes", "Jaqueira", "Jataúba", "Jatobá",
                     "João Alfredo", "Joaquim Nabuco", "Jucati", "Jupi", "Jurema", "Lagoa de Itaenga", "Lagoa do Carro", "Lagoa do Ouro", "Lagoa dos Gatos", "Lagoa Grande", "Lajedo", "Limoeiro", "Macaparana",
@@ -274,8 +274,8 @@
         $(document).ready(function () {
             // Inicializando os selects com Select2
             $('#mesorregiao, #microrregiao, #bacia, #municipio').select2({
-                placeholder: 'Selecione uma opção',
-                allowClear: true
+                placeholder: 'Selecione uma opção'
+                // allowClear: true
             });
 
             $(document).on('select2:open', () => {
